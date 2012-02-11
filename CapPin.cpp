@@ -12,12 +12,10 @@
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
 #else
-// include core Wiring API
-#include "WProgram.h"
-// include description files for other libraries used (if any)
 #include "pins_arduino.h"
-#include "WConstants.h"
+#include <WConstants.h>
 #endif
+
 
 
 
