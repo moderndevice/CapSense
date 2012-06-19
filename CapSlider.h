@@ -1,17 +1,13 @@
 /*
- CapacitiveSense.h v.03 - Capacitive Sensing Library for 'duino / Wiring
- Copyright (c) 2008 Paul Bagder  All rights reserved.
+ CapSlider.h v.05 - Capacitive Sensing Library for 'duino / Wiring
+ Paul Bagder 2009-2012
+ 
+ Implements a capacitive slider using some form of resistive bridge.
  */
 
 // ensure this library description is only included once
 #ifndef CapSlider_h
 #define CapSlider_h
-
-
-#define US  67UL  // period of four US powerline cycles in uS   ( 1/60 * 4 ) * 1000000
-#define EU  80UL  // period of four EU powerline cycles in uS   ( 1/50 * 4 ) * 1000000
-
-#define calibrateTime US  // change to EU for 50 cycle power countries
 
 // count after which functions timeout - arbitrary units
 // ground one pin through a 1k resistor to see how long this takes
@@ -24,6 +20,8 @@
 #include "WProgram.h"
 #endif
 
+#define SENSOR_NOT_TOUCHED 25     // value below which read will return zero (0)
+
 
 // library interface description
 class CapSlider
@@ -32,13 +30,14 @@ class CapSlider
 public:
 	
 	// variables
-    unsigned long  total;
+     long  pressure;
 	int error;
-	unsigned int sPerIterationBaseline;  // send pin baseline calibration measurement
-	unsigned int rPerIterationBaseline;  // receive pin baseline calibration measurement
+	 long sBaseline;  // send pin baseline calibration measurement
+	 long rBaseline;  // receive pin baseline calibration measurement
 	
-	unsigned long totalS;
-	unsigned long totalR;
+	 long totalS;
+	 long totalR;
+	uint8_t calibrateFlag;
 
 	
 	uint8_t sBit;   // send pin's ports and bitmask
@@ -57,12 +56,9 @@ public:
 	
 	// constructor
     CapSlider(uint8_t sendPin, uint8_t receivePin);
-	
-	// calibrate the baseline value for Slider method
-	void calibrateSlider();
-	
+		
 	// two pins with two directional sensing for sliders
-	long readSlider(unsigned int samples);
+	int readSlider(unsigned int samples);
 };
 
 #endif
