@@ -126,8 +126,8 @@ long CapPin::readPin(unsigned int samples)
 		*rOut |= rBit;         // set sensorPin output register HIGH to set pullups
 		interrupts();
 		
-		for( j = 0; j < 500; j++)
-		{  if ( *rIn & rBit ) 
+		for( j = 0; j < 5000; j++)  
+		{  if ( *rIn & rBit )  // bail out when pin goes high
 			break; }
 		
 		total+= j;
@@ -143,11 +143,15 @@ long CapPin::readPin(unsigned int samples)
 	// the method will return in about one second.
 	if (total >= ((unsigned long)samples * 450UL)) {
 		Serial.println("readPin method over timeout, check wiring.");
-		return -1000;
+		return -1;
 	}
 	
 	
+	//Serial.println(total);
+	
 #ifdef NO_NEGATIVES
+	
+
 	if (((long)total - (long)baselineCount) > 0) 
 		return (total - baselineCount); 
 	else return 0;  
